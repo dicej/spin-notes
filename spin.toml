@@ -13,7 +13,7 @@ key_value_stores = ["default"]
 [component.config]
 # TODO: Set this to the output of `cargo run --release -p derive-public-key $ORIGIN`, where
 # `$ORIGIN` is host you intend to run this app on, e.g. `http://127.0.0.1:3000`:
-public_key = "TODO"
+public_key = "f9d953f895f820f46ec3cbd68cf869a23569f54233526244e35ed9f551b9d2e9"
 [component.trigger]
 route = "/..."
 [component.build]
