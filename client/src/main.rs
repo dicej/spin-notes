@@ -111,7 +111,7 @@ fn notes(cx: Scope) -> impl IntoView {
             <div>
                 <label for="password">"password "</label>
                 <input type="password" id="password" autofocus node_ref=password_ref/>
-                <button on:click=load>"load"</button>
+                <button on:click=load>"Load"</button>
             </div>
             <div>
                 <label for="notes">"notes "</label>
