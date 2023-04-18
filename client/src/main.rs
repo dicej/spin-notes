@@ -115,7 +115,9 @@ fn notes(cx: Scope) -> impl IntoView {
             </div>
             <div>
                 <label for="notes">"notes "</label>
-                <textarea id="notes" rows=10 cols=80 node_ref=notes_ref>{notes}</textarea>
+                <textarea id="notes" rows=10 cols=80 node_ref=notes_ref>
+                    {notes}
+                </textarea>
                 <button on:click=save>"Save"</button>
             </div>
             <div style="color: #f54">

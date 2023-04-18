@@ -17,15 +17,16 @@ const PUBLIC_KEY_CONFIG_KEY: &str = "public_key";
 
 #[http_component]
 fn handle_notes(req: Request) -> Result<Response> {
-    let store = Store::open_default()?;
-
     Ok(match (req.method(), req.uri().path()) {
-        (&Method::GET, "/notes") => response()
-            .header("content-type", "text/plain")
-            .body(Some(store.get(NOTES_KEY).unwrap_or_default().into()))?,
+        (&Method::GET, "/notes") => response().header("content-type", "text/plain").body(Some(
+            Store::open_default()?
+                .get(NOTES_KEY)
+                .unwrap_or_default()
+                .into(),
+        ))?,
 
         (&Method::POST, "/notes") => match handle_post(
-            &store,
+            &Store::open_default()?,
             req.headers()
                 .get(SIGNATURE_HEADER)
                 .and_then(|v| v.to_str().ok()),
