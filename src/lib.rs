@@ -21,7 +21,7 @@ fn handle_notes(req: Request) -> Result<Response> {
 
     Ok(match (req.method(), req.uri().path()) {
         (&Method::GET, "/notes") => response()
-            .header("content-type", "text/plain;charset=UTF-8")
+            .header("content-type", "text/plain")
             .body(Some(store.get(NOTES_KEY).unwrap_or_default().into()))?,
 
         (&Method::POST, "/notes") => match handle_post(
@@ -41,11 +41,14 @@ fn handle_notes(req: Request) -> Result<Response> {
         (&Method::GET, path) => {
             if let Ok(body) = fs::read(path) {
                 response()
-                    .header("content-type", content_type(path))
+                    .header(
+                        "content-type",
+                        mime_guess::from_path(path).first_raw().unwrap(),
+                    )
                     .body(Some(body.into()))
             } else {
                 response()
-                    .header("content-type", content_type("index.html"))
+                    .header("content-type", "text/html")
                     .body(Some(fs::read("index.html")?.into()))
             }?
         }
@@ -56,24 +59,6 @@ fn handle_notes(req: Request) -> Result<Response> {
 
 fn response() -> Builder {
     http::Response::builder()
-}
-
-fn content_type(path: &str) -> &'static str {
-    // todo: use a library for this
-
-    let default = "application/octet-stream";
-
-    if let Some(index) = path.rfind('.') {
-        match &path[(index + 1)..] {
-            "html" => "text/html;charset=UTF-8",
-            "css" => "text/css;charset=UTF-8",
-            "js" => "text/javascript;charset=UTF-8",
-            "wasm" => "application/wasm",
-            _ => default,
-        }
-    } else {
-        default
-    }
 }
 
 fn handle_post(store: &Store, signature: Option<&str>, body: Option<&[u8]>) -> Result<()> {
